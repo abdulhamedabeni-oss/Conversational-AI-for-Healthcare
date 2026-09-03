@@ -1,0 +1,209 @@
+.about-page {
+  min-height: 100vh;
+  background: #f7fbff;
+  padding: 70px 8%;
+}
+
+/* HERO SECTION */
+
+.about-hero {
+  max-width: 800px;
+  margin: 0 auto 70px;
+  text-align: center;
+}
+
+.about-tag {
+  color: #1976d2;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+}
+
+.about-hero h1 {
+  color: #1a2b3c;
+  font-size: 42px;
+  margin-bottom: 20px;
+}
+
+.about-intro {
+  color: #5f6b76;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+/* ABOUT HOSPITAL */
+
+.about-section {
+  max-width: 1000px;
+  margin: 0 auto 60px;
+  padding: 40px;
+
+  background: white;
+  border-radius: 18px;
+
+  display: flex;
+  align-items: center;
+  gap: 35px;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+}
+
+.about-icon {
+  min-width: 100px;
+  height: 100px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #eaf4ff;
+  color: #1976d2;
+
+  border-radius: 50%;
+  font-size: 42px;
+}
+
+.about-content h2 {
+  color: #1a2b3c;
+  margin-bottom: 15px;
+}
+
+.about-content p {
+  color: #5f6b76;
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+
+/* MISSION AND VISION */
+
+.mission-vision {
+  max-width: 1000px;
+  margin: 0 auto 60px;
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+.about-card {
+  background: white;
+  padding: 35px;
+
+  border-radius: 18px;
+
+  text-align: center;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+
+  transition: transform 0.3s ease;
+}
+
+.about-card:hover {
+  transform: translateY(-5px);
+}
+
+.about-card-icon {
+  font-size: 38px;
+  color: #1976d2;
+  margin-bottom: 18px;
+}
+
+.about-card h2 {
+  color: #1a2b3c;
+  margin-bottom: 15px;
+}
+
+.about-card p {
+  color: #5f6b76;
+  line-height: 1.7;
+}
+
+/* HEALTHAI SECTION */
+
+.healthai-section {
+  max-width: 1000px;
+  margin: 0 auto;
+
+  background: #1976d2;
+  color: white;
+
+  padding: 45px;
+
+  border-radius: 18px;
+
+  display: flex;
+  align-items: center;
+  gap: 35px;
+}
+
+.healthai-icon {
+  min-width: 100px;
+  height: 100px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255, 255, 255, 0.15);
+
+  border-radius: 50%;
+
+  font-size: 45px;
+}
+
+.healthai-section h2 {
+  margin-bottom: 15px;
+  font-size: 28px;
+}
+
+.healthai-section p {
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+
+/* RESPONSIVE DESIGN */
+
+@media (max-width: 768px) {
+  .about-page {
+    padding: 50px 6%;
+  }
+
+  .about-hero h1 {
+    font-size: 34px;
+  }
+
+  .about-section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .mission-vision {
+    grid-template-columns: 1fr;
+  }
+
+  .healthai-section {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 500px) {
+  .about-page {
+    padding: 40px 5%;
+  }
+
+  .about-hero {
+    margin-bottom: 45px;
+  }
+
+  .about-hero h1 {
+    font-size: 28px;
+  }
+
+  .about-section,
+  .about-card,
+  .healthai-section {
+    padding: 25px;
+  }
+}
