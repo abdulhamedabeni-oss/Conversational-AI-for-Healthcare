@@ -1,3 +1,4 @@
+import API_BASE_URL from "../config/api";
 import { useEffect, useState } from "react";
 import "./Departments.css";
 
@@ -9,8 +10,7 @@ function Departments() {
   useEffect(() => {
     const fetchDepartments = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:5000/api/departments"
+        const response = await fetchfetch(`${API_BASE_URL}/api/departments`
         );
 
         const data = await response.json();

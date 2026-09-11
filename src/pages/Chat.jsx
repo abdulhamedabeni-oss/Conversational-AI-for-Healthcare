@@ -1,3 +1,4 @@
+import API_BASE_URL from "../config/api";
 import { useState, useRef, useEffect } from "react";
 import { FaPaperPlane, FaRobot } from "react-icons/fa";
 import "./Chat.css";
@@ -24,7 +25,7 @@ function Chat() {
   const sendMessageToBackend = async (question) => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/chat",
+        `${API_BASE_URL}/api/chat`,
         {
           method: "POST",
           headers: {

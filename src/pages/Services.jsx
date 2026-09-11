@@ -1,3 +1,4 @@
+import API_BASE_URL from "../config/api";
 import { useEffect, useState } from "react";
 import "./Services.css";
 
@@ -9,8 +10,7 @@ function Services() {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:5000/api/services"
+        const response = await fetchfetch(`${API_BASE_URL}/api/services`
         );
 
         const data = await response.json();

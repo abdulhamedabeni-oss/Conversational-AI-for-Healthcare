@@ -1,3 +1,4 @@
+import API_BASE_URL from "../config/api";
 import { useEffect, useState } from "react";
 import {
   FaHospital,
@@ -15,8 +16,7 @@ function About() {
   useEffect(() => {
     const fetchHospitalInfo = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:5000/api/hospital"
+        const response = await fetchfetch(`${API_BASE_URL}/api/hospital`
         );
 
         const data = await response.json();
