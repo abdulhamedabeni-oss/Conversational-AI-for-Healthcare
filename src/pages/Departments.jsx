@@ -10,7 +10,7 @@ function Departments() {
   useEffect(() => {
     const fetchDepartments = async () => {
       try {
-        const response = await fetchfetch(`${API_BASE_URL}/api/departments`
+        const response = await fetch(`${API_BASE_URL}/api/departments`
         );
 
         const data = await response.json();

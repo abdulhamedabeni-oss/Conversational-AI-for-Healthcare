@@ -16,7 +16,7 @@ function About() {
   useEffect(() => {
     const fetchHospitalInfo = async () => {
       try {
-        const response = await fetchfetch(`${API_BASE_URL}/api/hospital`
+        const response = await fetch(`${API_BASE_URL}/api/hospital`
         );
 
         const data = await response.json();

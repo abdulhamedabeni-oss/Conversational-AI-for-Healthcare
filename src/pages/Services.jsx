@@ -10,7 +10,7 @@ function Services() {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await fetchfetch(`${API_BASE_URL}/api/services`
+        const response = await fetch(`${API_BASE_URL}/api/services`
         );
 
         const data = await response.json();
