@@ -1,17 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import { FaPaperPlane, FaRobot } from "react-icons/fa";
-import {
-  hospitalInfo,
-  services,
-  departments,
-} from "../data/hospitalData";
 import "./Chat.css";
 
 function Chat() {
   const [messages, setMessages] = useState([
     {
       sender: "bot",
-      text: `Hello! 👋 Welcome to ${hospitalInfo.name}. I am HealthAI, your healthcare information assistant. How can I help you today?`,
+      text: "Hello! 👋 I am HealthAI, your healthcare information assistant. How can I help you today?",
     },
   ]);
 
@@ -26,176 +21,39 @@ function Chat() {
     });
   }, [messages, isTyping]);
 
-  const getBotResponse = (userInput) => {
-    const message = userInput.toLowerCase().trim();
-
-    // Greetings
-    if (
-      message.includes("hello") ||
-      message.includes("hi") ||
-      message.includes("good morning") ||
-      message.includes("good afternoon") ||
-      message.includes("good evening")
-    ) {
-      return `Hello! 👋 Welcome to ${hospitalInfo.name}. How can I assist you today?`;
-    }
-
-    // How are you
-    if (
-      message.includes("how are you") ||
-      message.includes("how do you do")
-    ) {
-      return "I'm doing great, thank you! 😊 I'm here to help you find information about our hospital, services, departments, contact details, and opening hours.";
-    }
-
-    // Who are you
-    if (
-      message.includes("who are you") ||
-      message.includes("what are you")
-    ) {
-      return "I am HealthAI, a conversational healthcare information assistant designed to help users access information about hospital services and facilities.";
-    }
-
-    // What can you do
-    if (
-      message.includes("what can you do") ||
-      message.includes("help me") ||
-      message.includes("how can you help")
-    ) {
-      return "I can provide information about hospital services, departments, contact information, location, and opening hours. Try asking me a question! 😊";
-    }
-
-    // Hospital information
-    if (
-      message.includes("about hospital") ||
-      message.includes("about the hospital") ||
-      message.includes("tell me about")
-    ) {
-      return hospitalInfo.description;
-    }
-
-    // Services
-    if (
-      message.includes("service") ||
-      message.includes("what do you offer") ||
-      message.includes("what do you provide")
-    ) {
-      return `Our healthcare services include: ${services
-        .map((service) => service.title)
-        .join(", ")}.`;
-    }
-
-    // Emergency
-    if (
-      message.includes("emergency") ||
-      message.includes("urgent")
-    ) {
-      const emergencyService = services.find((service) =>
-        service.title.toLowerCase().includes("emergency")
+  const sendMessageToBackend = async (question) => {
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/chat",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: question,
+          }),
+        }
       );
 
-      if (emergencyService) {
-        return `${emergencyService.title}: ${emergencyService.description}`;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Unable to get a response from HealthAI."
+        );
       }
 
-      return "For medical emergencies, please contact the hospital or visit the nearest emergency department immediately.";
+      return data.reply;
+    } catch (error) {
+      console.error("Chat error:", error);
+
+      return "Sorry, I am unable to respond at the moment. Please try again.";
     }
-
-    // Laboratory
-    if (
-      message.includes("laboratory") ||
-      message.includes("lab test") ||
-      message.includes("test")
-    ) {
-      const laboratoryService = services.find((service) =>
-        service.title.toLowerCase().includes("laboratory")
-      );
-
-      if (laboratoryService) {
-        return `${laboratoryService.title}: ${laboratoryService.description}`;
-      }
-    }
-
-    // Pharmacy
-    if (
-      message.includes("pharmacy") ||
-      message.includes("medicine") ||
-      message.includes("medication")
-    ) {
-      const pharmacyService = services.find((service) =>
-        service.title.toLowerCase().includes("pharmacy")
-      );
-
-      if (pharmacyService) {
-        return `${pharmacyService.title}: ${pharmacyService.description}`;
-      }
-    }
-
-    // Departments
-    if (
-      message.includes("department") ||
-      message.includes("where can i")
-    ) {
-      return `Our departments include: ${departments
-        .map((department) => department.name)
-        .join(", ")}.`;
-    }
-
-    // Contact
-    if (
-      message.includes("phone") ||
-      message.includes("contact") ||
-      message.includes("email") ||
-      message.includes("call")
-    ) {
-      return `You can contact us on ${hospitalInfo.phone} or email us at ${hospitalInfo.email}.`;
-    }
-
-    // Location
-    if (
-      message.includes("location") ||
-      message.includes("address") ||
-      message.includes("where are you") ||
-      message.includes("where is the hospital")
-    ) {
-      return `Our hospital is located at ${hospitalInfo.address}.`;
-    }
-
-    // Opening hours
-    if (
-      message.includes("open") ||
-      message.includes("opening") ||
-      message.includes("hours") ||
-      message.includes("close")
-    ) {
-      return `Our opening hours are: ${hospitalInfo.openingHours}.`;
-    }
-
-    // Thank you
-    if (
-      message.includes("thank") ||
-      message.includes("thanks")
-    ) {
-      return "You're very welcome! 😊 I'm always here to help with hospital information.";
-    }
-
-    // Goodbye
-    if (
-      message.includes("bye") ||
-      message.includes("goodbye") ||
-      message.includes("see you")
-    ) {
-      return "Goodbye! 👋 Thank you for using HealthAI. Stay safe and take care!";
-    }
-
-    // Default response
-    return "I'm sorry, I don't fully understand that question yet. 😊 You can ask me about hospital services, departments, emergency care, laboratory services, pharmacy, location, contact information, or opening hours.";
   };
 
-  const handleSendMessage = () => {
-    if (input.trim() === "") return;
-
-    const question = input;
+  const sendMessage = async (question) => {
+    if (!question.trim()) return;
 
     const userMessage = {
       sender: "user",
@@ -210,47 +68,27 @@ function Chat() {
     setInput("");
     setIsTyping(true);
 
-    setTimeout(() => {
-      const botResponse = {
-        sender: "bot",
-        text: getBotResponse(question),
-      };
+    const botReply = await sendMessageToBackend(question);
 
-      setMessages((previousMessages) => [
-        ...previousMessages,
-        botResponse,
-      ]);
-
-      setIsTyping(false);
-    }, 800);
-  };
-
-  const handleQuickQuestion = (question) => {
-    const userMessage = {
-      sender: "user",
-      text: question,
+    const botMessage = {
+      sender: "bot",
+      text: botReply,
     };
 
     setMessages((previousMessages) => [
       ...previousMessages,
-      userMessage,
+      botMessage,
     ]);
 
-    setIsTyping(true);
+    setIsTyping(false);
+  };
 
-    setTimeout(() => {
-      const botResponse = {
-        sender: "bot",
-        text: getBotResponse(question),
-      };
+  const handleSendMessage = () => {
+    sendMessage(input);
+  };
 
-      setMessages((previousMessages) => [
-        ...previousMessages,
-        botResponse,
-      ]);
-
-      setIsTyping(false);
-    }, 800);
+  const handleQuickQuestion = (question) => {
+    sendMessage(question);
   };
 
   return (
@@ -274,7 +112,9 @@ function Chat() {
           <div className="quick-question-buttons">
             <button
               onClick={() =>
-                handleQuickQuestion("What services do you offer?")
+                handleQuickQuestion(
+                  "What services do you offer?"
+                )
               }
             >
               Our Services
@@ -282,7 +122,9 @@ function Chat() {
 
             <button
               onClick={() =>
-                handleQuickQuestion("What departments are available?")
+                handleQuickQuestion(
+                  "What departments are available?"
+                )
               }
             >
               Departments
@@ -300,7 +142,9 @@ function Chat() {
 
             <button
               onClick={() =>
-                handleQuickQuestion("What are your opening hours?")
+                handleQuickQuestion(
+                  "What are your opening hours?"
+                )
               }
             >
               Opening Hours
@@ -336,7 +180,9 @@ function Chat() {
             type="text"
             placeholder="Ask a question about the hospital..."
             value={input}
-            onChange={(event) => setInput(event.target.value)}
+            onChange={(event) =>
+              setInput(event.target.value)
+            }
             onKeyDown={(event) => {
               if (event.key === "Enter") {
                 handleSendMessage();

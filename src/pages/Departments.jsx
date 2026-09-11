@@ -1,7 +1,57 @@
-import { departments } from "../data/hospitalData";
+import { useEffect, useState } from "react";
 import "./Departments.css";
 
 function Departments() {
+  const [departments, setDepartments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:5000/api/departments"
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.message || "Unable to fetch departments."
+          );
+        }
+
+        setDepartments(data);
+      } catch (error) {
+        console.error("Error fetching departments:", error);
+
+        setError(
+          "Unable to load hospital departments at the moment."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDepartments();
+  }, []);
+
+  if (loading) {
+    return (
+      <main className="departments-page">
+        <p>Loading departments...</p>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="departments-page">
+        <p>{error}</p>
+      </main>
+    );
+  }
+
   return (
     <main className="departments-page">
       <section className="departments-header">
@@ -17,7 +67,7 @@ function Departments() {
 
       <section className="departments-grid">
         {departments.map((department) => (
-          <div className="department-card" key={department.id}>
+          <div className="department-card" key={department._id}>
             <h2>{department.name}</h2>
 
             <p>{department.description}</p>

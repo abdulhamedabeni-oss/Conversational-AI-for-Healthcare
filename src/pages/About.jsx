@@ -1,8 +1,66 @@
-import { FaHospital, FaBullseye, FaEye, FaRobot } from "react-icons/fa";
-import { hospitalInfo } from "../data/hospitalData";
+import { useEffect, useState } from "react";
+import {
+  FaHospital,
+  FaBullseye,
+  FaEye,
+  FaRobot,
+} from "react-icons/fa";
 import "./About.css";
 
 function About() {
+  const [hospitalInfo, setHospitalInfo] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchHospitalInfo = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:5000/api/hospital"
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.message || "Unable to fetch hospital information."
+          );
+        }
+
+        setHospitalInfo(data);
+      } catch (error) {
+        console.error(
+          "Error fetching hospital information:",
+          error
+        );
+
+        setError(
+          "Unable to load hospital information at the moment."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHospitalInfo();
+  }, []);
+
+  if (loading) {
+    return (
+      <main className="about-page">
+        <p>Loading hospital information...</p>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="about-page">
+        <p>{error}</p>
+      </main>
+    );
+  }
+
   return (
     <main className="about-page">
       {/* Header */}
@@ -26,12 +84,21 @@ function About() {
         <div className="about-content">
           <h2>About {hospitalInfo.name}</h2>
 
-          <p>{hospitalInfo.description}</p>
+          <p>{hospitalInfo.tagline}</p>
 
           <p>
             Our healthcare information system is designed to make it easier
             for patients, visitors, and members of the public to access
             important information about hospital services and facilities.
+          </p>
+
+          <p>
+            <strong>Location:</strong> {hospitalInfo.address}
+          </p>
+
+          <p>
+            <strong>Opening Hours:</strong>{" "}
+            {hospitalInfo.openingHours}
           </p>
         </div>
       </section>

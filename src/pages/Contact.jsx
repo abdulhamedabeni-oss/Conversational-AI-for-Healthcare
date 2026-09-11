@@ -14,6 +14,7 @@ function Contact() {
   });
 
   const [successMessage, setSuccessMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -24,7 +25,7 @@ function Contact() {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     // Check if all fields are filled
@@ -37,22 +38,52 @@ function Contact() {
       return;
     }
 
-    // Show success message
-    setSuccessMessage(
-      "Thank you! Your message has been sent successfully."
-    );
-
-    // Clear the form
-    setFormData({
-      name: "",
-      email: "",
-      message: "",
-    });
-
-    // Remove the message after 5 seconds
-    setTimeout(() => {
+    try {
+      setIsSubmitting(true);
       setSuccessMessage("");
-    }, 5000);
+
+      const response = await fetch(
+        "http://localhost:5000/api/contact",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Something went wrong."
+        );
+      }
+
+      // Show success message from backend
+      setSuccessMessage(data.message);
+
+      // Clear the form
+      setFormData({
+        name: "",
+        email: "",
+        message: "",
+      });
+
+      // Remove message after 5 seconds
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 5000);
+    } catch (error) {
+      console.error("Error submitting contact form:", error);
+
+      setSuccessMessage(
+        "Unable to send your message. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -156,8 +187,12 @@ function Contact() {
             </p>
           )}
 
-          <button type="submit" className="send-btn">
-            Send Message
+          <button
+            type="submit"
+            className="send-btn"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Sending..." : "Send Message"}
           </button>
         </form>
       </section>
