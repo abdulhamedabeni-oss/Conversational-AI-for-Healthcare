@@ -12,6 +12,7 @@ function Navbar() {
         <Link to="/services">Services</Link>
         <Link to="/departments">Departments</Link>
         <Link to="/contact">Contact</Link>
+        <Link to="/appointments">Appointments</Link>
         <Link to="/chat" className="chat-link">
           Chat with AI
         </Link>

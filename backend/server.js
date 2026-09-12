@@ -8,6 +8,8 @@ const hospitalRoutes = require("./routes/hospitalRoutes");
 const serviceRoutes = require("./routes/serviceRoutes");
 const departmentRoutes = require("./routes/departmentRoutes");
 const chatRoutes = require("./routes/chatRoutes");
+const doctorRoutes = require("./routes/doctorRoutes");
+const appointmentRoutes = require("./routes/appointmentRoutes");
 
 const app = express();
 
@@ -48,6 +50,12 @@ app.use("/api/departments", departmentRoutes);
 
 // Chatbot API
 app.use("/api/chat", chatRoutes);
+
+// Doctors API
+app.use("/api/doctors", doctorRoutes);
+
+// Appointments API
+app.use("/api/appointments", appointmentRoutes);
 
 // Start server
 app.listen(PORT, () => {

@@ -1,3 +1,4 @@
+import Appointments from "./pages/Appointments";
 import Navbar from "./components/Navbar.jsx";
 import { Routes, Route } from "react-router-dom";
 
@@ -20,6 +21,7 @@ function App() {
       <Route path="/departments" element={<Departments />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/chat" element={<Chat />} />
+      <Route path="/appointments" element={<Appointments />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
     </>
